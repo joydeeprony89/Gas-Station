@@ -17,20 +17,39 @@ namespace Gas_Station
   {
     public int CanCompleteCircuit(int[] gas, int[] cost)
     {
-      int sum = 0, position = 0, total = 0;
-      for(int i = 0; i < gas.Length; i++)
+      // We will have a answer only if total of cost <= gas
+      int position = -1;
+      int costSum = Sum(cost);
+      int gasSum = Sum(gas);
+      // if total cost gthan total available fuel
+      if (costSum > gasSum) return position;
+      int total = 0;
+      //start from index 0
+      position = 0;
+      for (int i = 0; i < gas.Length; i++)
       {
-        sum = sum + gas[i] - cost[i];
-        if (sum < 0)
+        // if total went below 0 which means we can have a solution from the current index.
+        total = total + gas[i] - cost[i];
+        if (total < 0)
         {
-          total = total + sum;
-          sum = 0;
+          // reset the total and start position.
+          // position would be the next as the current posiiton does not have a solution
           position = i + 1;
+          // reset total also to 0
+          total = 0;
         }
       }
 
-      total = total + sum;
-      return total < 0 ? -1: position;
+      return position;
+    }
+
+    int Sum(int[] arr)
+    {
+      int sum = 0;
+      foreach (int i in arr)
+        sum += i;
+
+      return sum;
     }
   }
 }
